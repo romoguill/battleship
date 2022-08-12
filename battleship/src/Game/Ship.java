@@ -38,10 +38,7 @@ public class Ship {
     }
 
     public boolean wasSunk() {
-        if (this.shotsTaken == this.size) {
-            return true;
-        }
-        return false;
+        return this.shotsTaken == this.size;
     }
 
     public String getName() {

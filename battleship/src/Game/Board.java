@@ -35,7 +35,6 @@ public class Board {
         this.boardMatrix[x][y] = value;
     }
 
-
 //                    }
 //                }
 //                ;
@@ -98,16 +97,22 @@ public class Board {
             String placementDirection;
             do {
                 System.out.print("DIRECCION " + ship.getName() + String.format("( %d ), V/H: ", ship.getSize()));
-                placementDirection = scanner.next();
+                placementDirection = scanner.next().toUpperCase();
             }
-            while (!placementDirection.equalsIgnoreCase("V") && !placementDirection.equalsIgnoreCase("H"));
-            boolean placementVertical = placementDirection.equalsIgnoreCase("V");
+            while (!placementDirection.equals("V") && !(placementDirection.equals("H")));
+            boolean placementVertical = placementDirection.equals("V");
+
+            if (placementVertical) {
+                System.out.println("Vertical");
+                System.out.println(placementDirection);
+            }
+            ;
             System.out.print("coordenada X comienzo:  ");
             inputString = scanner.next();
-            int y1 = Integer.parseInt(inputString);
+            int x1 = Integer.parseInt(inputString);
             System.out.print("coordenada Y comienzo: ");
             inputString = scanner.next();
-            int x1 = Integer.parseInt(inputString);
+            int y1 = Integer.parseInt(inputString);
             int shipWidth = 0;
             int shipHeight = 0;
             if (placementVertical) {
@@ -122,28 +127,28 @@ public class Board {
             int xEnd = 0;
             int yEnd = 0;
 
-            if (y1 > 1) {
-                xStart = y1 - 1;
+            if (x1 > 1) {
+                xStart = x1 - 1;
             } else {
                 xStart = 1;
             }
             ;
-            if (y1 > boardMatrix.length - 2) {
+            if (x1 > boardMatrix.length - 2) {
                 xEnd = boardMatrix.length - 1;
             } else {
-                xEnd = y1 + 1;
+                xEnd = x1 + 1;
             }
             ;
-            if (x1 > 1) {
-                yStart = x1 - 1;
+            if (y1 > 1) {
+                yStart = y1 - 1;
             } else {
                 yStart = 1;
             }
             ;
-            if (x1 > boardMatrix.length - 2) {
+            if (y1 > boardMatrix.length - 2) {
                 yEnd = boardMatrix.length - 1;
             } else {
-                yEnd = 1 + x1;
+                yEnd = 1 + y1;
             }
             ;
             if (placementVertical) {
@@ -168,16 +173,27 @@ public class Board {
 
             overPlacement = 0;
             if (placementCondition.equals("ok")) {
-                for (int i = xStart; i < xEnd + 1; i++) {
-                    for (int j = yStart; j < yEnd + 1; j++) {
-                        if (boardMatrix[i][j].equals("~")) {
+                if (placementVertical) {
+                    for (int i = x1; i < shipSize; i++) {
+                        System.out.println("estoy aca");
+                        if (boardMatrix[i][x1].equals("~")) {
+                        } else {
+                            overPlacement++;
+                        }
+                    }
+                } else {
+                    for (int j = y1; j < shipSize; j++) {
+
+                        if (boardMatrix[y1][j].equals("~")) {
                         } else {
                             overPlacement++;
                         }
                     }
                 }
+
             }
-            //        System.out.println("X" + "--" + xStart + "--" + xEnd + "Y" + "--" + yStart + "--" + yEnd);
+            System.out.println("estoy aca2 ");
+            System.out.println("X" + "--" + xStart + "--" + xEnd + "Y" + "--" + yStart + "--" + yEnd);
             //          ship.setTotalXPositionEnd(xEnd);
             //        ship.setTotalYPositionEnd(yEnd);
             //         ship.setTotalXPositionStart(xStart);
@@ -194,8 +210,8 @@ public class Board {
 
 //
             if (placementCondition.equals("ok")) {
-                for (int j = xStart; j < xEnd + 1; j++)
-                    for (int i = yStart; i < yEnd + 1; i++) {
+                for (int i = xStart; i < xEnd + 1; i++)
+                    for (int j = yStart; j < yEnd + 1; j++) {
 
                         boardMatrix[j][i] = "o";
                     }
@@ -203,20 +219,11 @@ public class Board {
 
             }
             {
-                for (int i = 0; i < shipSize + 1; i++) {
+                for (int i = 0; i < shipSize; i++) {
                     if (placementVertical) {
-                        boardMatrix[y1][x1 + i] = "o";
+                        boardMatrix[i + y1][x1] = "*";
                     } else {
-                        boardMatrix[i + y1][x1] = "o";
-                    }
-                }
-                {
-                    for (int i = 1; i < boardMatrix.length; i++) {
-                        for (int j = 1; j < boardMatrix.length; j++) {
-                            if (boardMatrix[i][j].equals("o")) {
-                                boardMatrix[i][j] = "*";
-                            }
-                        }
+                        boardMatrix[y1][x1 + i] = "*";
                     }
                 }
 
@@ -225,6 +232,20 @@ public class Board {
 
 
         } while (placementCondition.equals("error") || overPlacement > 0);
+
+        cleanMatrix();
+    }
+
+    public void cleanMatrix() {
+        System.out.println(boardMatrix);
+        System.out.println(boardMatrix.length);
+        for (int i = 1; i < boardMatrix.length; i++) {
+            for (int j = 1; j < boardMatrix.length; j++) {
+                if (boardMatrix[j][i].equals("o")) {
+                    boardMatrix[j][i] = "~";
+                }
+            }
+        }
     }
 
 
