@@ -3,7 +3,7 @@ package Game;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
+public class Game extends GameConfig {
     public static ArrayList<Ship> player1Ships;
     public static ArrayList<Ship> player2Ships;
     public static Board player1Board;
@@ -13,7 +13,82 @@ public class Game {
     public static String player2;
 
     public static void main(String[] args) {
+        renderWelcome();
+    }
 
+    public static void renderWelcome() {
+        System.out.println("\nWelcome to Battleship Game");
+        System.out.println("1. Play");
+        System.out.println("2. Configure");
+        System.out.println("3. Quit\n");
+
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Select option: ");
+
+        int input;
+        do {
+            input = scanner.nextInt();
+        } while (input != 1 && input != 2 && input != 3);
+
+        if (input == 1) {
+            Game.startGame();
+        } else if (input == 2) {
+            Game.configure();
+        } else {
+            System.exit(0);
+        }
+    }
+
+    public static void configure() {
+        System.out.println("\nGame Configuration");
+        System.out.println("1. Change name. Current: " + GameConfig.getPlayerName());
+        System.out.println("2. Set difficulty. Current: " + GameConfig.getDifficulty());
+        System.out.println("3. Back\n");
+
+        System.out.print("Select option: ");
+
+
+        Scanner scanner = new Scanner(System.in);
+
+        int input;
+        do {
+            input = scanner.nextInt();
+        } while (input != 1 && input != 2 && input != 3);
+
+        if (input == 1) {
+            scanner.nextLine();
+            System.out.print("\nEnter your name: ");
+
+            GameConfig.setPlayerName(scanner.nextLine());
+        } else if (input == 2) {
+            System.out.println("\nSelect difficulty");
+            System.out.println("1. Easy");
+            System.out.println("2. Hard");
+            System.out.println("3. Ironman");
+
+            System.out.print("Select option: ");
+
+            int difficulty;
+            do {
+                difficulty = scanner.nextInt();
+            } while (difficulty != 1 && difficulty != 2 && difficulty != 3);
+
+            if (difficulty == 1) {
+                GameConfig.setDifficulty(Difficulty.EASY);
+            } else if (difficulty == 2) {
+                GameConfig.setDifficulty(Difficulty.HARD);
+            } else {
+                GameConfig.setDifficulty(Difficulty.IRONMAN);
+            }
+        } else {
+            renderWelcome();
+        }
+        renderWelcome();
+    }
+
+    public static void startGame() {
         PcBrain pcBrain = new PcBrain();
 
         player1 = "Ariel/Rodrigo";
