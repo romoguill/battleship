@@ -52,7 +52,7 @@ public class PcBrain {
 
 
 //        Depending on if the orientation of the ship is known, add the 4 quadrants as possible
-//            high probability coordinates, or 2 if its known (East, West for horizontal; North
+//          high probability coordinates, or 2 if its known (East, West for horizontal; North
 //          South for vertical)
         HashMap<String, int[]> quadrants = new HashMap<>();
 
@@ -83,7 +83,7 @@ public class PcBrain {
         int x = coordinate[0];
         int y = coordinate[1];
 
-        return x >= 0 && x <= 10 && y >= 0 && y <= 10;
+        return x >= 1 && x <= 11 && y >= 1 && y <= 11;
     }
 
 
