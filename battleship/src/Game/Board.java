@@ -80,32 +80,22 @@ public class Board {
     public void placeShip(Ship ship) {
         int shipSize = ship.getSize();
         String placementCondition = "error";
-
         Scanner scanner = new Scanner(System.in);
         String inputString;
-
         int overPlacement = 0;
         do {
             String placementDirection;
             do {
                 System.out.print("DIRECCION " + ship.getName() + String.format("( %d ), V/H: ", ship.getSize()));
                 placementDirection = scanner.next().toUpperCase();
-            }
-            while (!placementDirection.equals("V") && !(placementDirection.equals("H")));
+            } while (!placementDirection.equals("V") && !(placementDirection.equals("H")));
             boolean placementVertical = placementDirection.equals("V");
-
-            if (placementVertical) {
-                System.out.println("Vertical");
-                System.out.println(placementDirection);
-            }
-            ;
             System.out.print("coordenada X comienzo:  ");
             inputString = scanner.next();
             int x1 = Integer.parseInt(inputString);
             System.out.print("coordenada Y comienzo: ");
             inputString = scanner.next();
             int y1 = Integer.parseInt(inputString);
-
             int xStart = Math.max(x1 - 1, 1);
             int yStart = Math.max(y1 - 1, 1);
             int xEnd, yEnd;
@@ -127,7 +117,6 @@ public class Board {
             } else {
                 placementCondition = "ok";
             }
-            overPlacement = 0;
             if (placementCondition.equals("ok")) {
                 if (placementVertical) {
                     for (int i = xStart; i < xEnd + 1; i++) {
@@ -146,22 +135,17 @@ public class Board {
                     }
                 }
             }
-            System.out.println("estoy aca2 ");
             System.out.println("X" + "--" + xStart + "--" + xEnd + "Y" + "--" + yStart + "--" + yEnd);
             if (placementCondition.equals("ok") && overPlacement == 0) {
                 for (int i = xStart; i < xEnd + 1; i++)
                     for (int j = yStart; j < yEnd + 1; j++) {
                         boardMatrix[j][i] = "o";
                     }
-            }
-            {
-                if (placementCondition.equals("ok") && overPlacement == 0) {
-                    for (int i = 0; i < shipSize; i++) {
-                        if (placementVertical) {
-                            boardMatrix[i + y1][x1] = "*";
-                        } else {
-                            boardMatrix[y1][x1 + i] = "*";
-                        }
+                for (int i = 0; i < shipSize; i++) {
+                    if (placementVertical) {
+                        boardMatrix[i + y1][x1] = "*";
+                    } else {
+                        boardMatrix[y1][x1 + i] = "*";
                     }
                 }
             }
