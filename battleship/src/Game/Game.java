@@ -91,7 +91,7 @@ public class Game extends GameConfig {
     public static void startGame() {
         PcBrain pcBrain = new PcBrain();
 
-        player1 = "Ariel/Rodrigo";
+        player1 = Game.getPlayerName();
         player2 = "PC";
 
         player1Ships = loadShips();
@@ -113,9 +113,13 @@ public class Game extends GameConfig {
                     System.out.printf("%s has won!%n", player1);
                     break;
                 }
+                player2Board.printBoard();
             } else {
-                int[] coordinates = pcBrain.useRandomAlgorithm();
-                shoot(coordinates[0], coordinates[1], player1Board, player1Ships);
+                int[] coordinate = pcBrain.useRandomAlgorithm();
+                int x = coordinate[0];
+                int y = coordinate[1];
+
+                shoot(x, y, player1Board, player1Ships);
                 player1Board.printBoard();
                 if (isGameOver(player1Ships)) {
                     System.out.printf("%s has won!%n", player2);
@@ -174,13 +178,13 @@ public class Game extends GameConfig {
                     if (ship.isSunk()) {
                         System.out.println("Great! You sunk a ship");
                     }
-                    board.setValueOfBoardMatrix(x, y, "X");
-                    break;
+                    board.setValueOfBoardMatrix(x, y, "H");
+                    return;
                 }
             }
-            System.out.println("Water");
-            board.setValueOfBoardMatrix(x, y, "O");
         }
+        System.out.println("Water");
+        board.setValueOfBoardMatrix(x, y, "W");
     }
 
     public static boolean isGameOver(ArrayList<Ship> ships) {

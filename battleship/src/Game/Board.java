@@ -32,7 +32,7 @@ public class Board {
     }
 
     public void setValueOfBoardMatrix(int x, int y, String value) {
-        this.boardMatrix[x][y] = value;
+        this.boardMatrix[y][x] = value;
     }
 
 //                    }

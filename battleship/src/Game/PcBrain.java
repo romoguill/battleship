@@ -16,6 +16,7 @@ public class PcBrain {
     private ArrayList<int[]> highProbabilityCoordinates = new ArrayList<>();
 
     public PcBrain() {
+        possibleCoordinates = new ArrayList<>();
         for (int i = 1; i <= 11; i++) {
             for (int j = 1; j <= 11; j++) {
                 this.possibleCoordinates.add(new int[]{i, j});
