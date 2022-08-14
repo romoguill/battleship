@@ -232,8 +232,6 @@ public class Board {
 
 
         } while (placementCondition.equals("error") || overPlacement > 0);
-
-        cleanMatrix();
     }
 
     public void cleanMatrix() {
@@ -242,7 +240,7 @@ public class Board {
         for (int i = 1; i < boardMatrix.length; i++) {
             for (int j = 1; j < boardMatrix.length; j++) {
                 if (boardMatrix[j][i].equals("o")) {
-                    boardMatrix[j][i] = "~";
+                    boardMatrix[j][i] = "";
                 }
             }
         }
