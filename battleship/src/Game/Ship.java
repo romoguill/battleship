@@ -20,9 +20,9 @@ public class Ship {
 
     public boolean wasShot(int x, int y) {
         boolean wasReached = false;
-        if (this.horizontal) {
+        if (this.horizontal && this.y == y) {
             wasReached = IntStream.range(this.x, this.x + this.size + 1).anyMatch(num -> num == x);
-        } else {
+        } else if (!this.horizontal && this.x == x) {
             wasReached = IntStream.range(this.y, this.y + this.size + 1).anyMatch(num -> num == y);
         }
 
