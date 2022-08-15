@@ -2,6 +2,7 @@ package Game;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.SortedMap;
 
 public class Game extends GameConfig {
     public static ArrayList<Ship> player1Ships;
@@ -134,10 +135,40 @@ public class Game extends GameConfig {
         System.out.printf("%s's turn to place ships%n", player);
         board.printBoard();
 
+//        for (Ship ship : ships) {
+//            board.placeShip(ship);
+//            System.out.println(ship.getName() + " placed successfully.\n");
+//            board.printBoard();
+//        }
+
         for (Ship ship : ships) {
-            board.placeShip(ship);
-            System.out.println(ship.getName() + " placed successfully.\n");
-            board.printBoard();
+            boolean wasPlaced = false;
+            while (!wasPlaced) {
+                Scanner scanner = new Scanner(System.in);
+
+                String orientationInput;
+
+                while (true) {
+                    System.out.print("Choose Orientation, V / H: ");
+                    orientationInput = scanner.nextLine();
+                    if (!orientationInput.equalsIgnoreCase("V") && !orientationInput.equalsIgnoreCase("H")) {
+                        System.out.println("Invalid orientation\n");
+                        continue;
+                    }
+                    break;
+                }
+
+                Orientation orientation = orientationInput.equalsIgnoreCase("V") ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+
+                System.out.println("Choose ship's origin coordinate");
+                System.out.print("X: ");
+                int xInput = scanner.nextInt();
+                System.out.print("Y: ");
+                int yInput = scanner.nextInt();
+
+                wasPlaced = board.placeShip2(xInput, yInput, ship, orientation);
+                if (!wasPlaced) System.out.println("Couldn't place ship, invalid/already taken coordinates\n");
+            }
         }
     }
 

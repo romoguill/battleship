@@ -172,21 +172,21 @@ public class Board {
             }
         }
 
+//        For each coordinate in the footprint add its coordinate and all surrounding ones to the takenCoordinates Array
         for (int[] coordinate : shipFootprint) {
             int x = coordinate[0];
             int y = coordinate[1];
-            this.setValueOfBoardMatrix(x, y, "O");
+            this.setValueOfBoardMatrix(x, y, "*");
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     int[] newCoordinate = new int[]{x + i, j + 1};
-                    if (Board.isValidCoordinate(newCoordinate) && !shipFootprint.contains(newCoordinate)) {
-                        shipFootprint.add(newCoordinate);
+                    if (Board.isValidCoordinate(newCoordinate) && !takenCoordinates.contains(newCoordinate)) {
+                        this.takenCoordinates.add(newCoordinate);
                     }
-
                 }
-
             }
         }
+        this.printBoard();
         return true;
     }
 
@@ -194,7 +194,7 @@ public class Board {
         int x = coordinate[0];
         int y = coordinate[1];
 
-        return x >= 1 && x <= 11 && y >= 1 && y <= 11;
+        return x >= 1 && x <= 10 && y >= 1 && y <= 10;
     }
 
     public void cleanMatrix() {
