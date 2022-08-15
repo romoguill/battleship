@@ -1,11 +1,13 @@
 package Game;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Board {
 
     private final String[][] boardMatrix;
+    private final ArrayList<int[]> takenCoordinates = new ArrayList<>();
 
 
 //    NO VEO QUE SE USE EN NINGUN LADO
@@ -22,7 +24,7 @@ public class Board {
 //                        boardMatrix[0][j] = i.toString();
 
     public String[][] getBoardMatrix() {
-        String[][] deepCopy = new String[11][11];
+        String[][] deepCopy = new String[10][10];
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
                 deepCopy[i][j] = this.boardMatrix[i][j];
@@ -150,6 +152,49 @@ public class Board {
                 }
             }
         } while (placementCondition.equals("error") || overPlacement > 0);
+    }
+
+    public boolean placeShip2(int xOrigin, int yOrigin, Ship ship, Orientation orientation) {
+//        Get the possible footprint of the ship by adding coordinates to an array.
+        ArrayList<int[]> shipFootprint = new ArrayList<>();
+        for (int i = 0; i < ship.getSize(); i++) {
+            if (orientation == Orientation.HORIZONTAL) {
+                shipFootprint.add(new int[]{xOrigin + i, yOrigin});
+            } else if (orientation == Orientation.VERTICAL) {
+                shipFootprint.add(new int[]{xOrigin, yOrigin + i});
+            }
+        }
+
+//        Check if footprint of ship has invalid or already taken coordinates
+        for (int[] coordinate : shipFootprint) {
+            if (!Board.isValidCoordinate(coordinate) || this.takenCoordinates.contains(coordinate)) {
+                return false;
+            }
+        }
+
+        for (int[] coordinate : shipFootprint) {
+            int x = coordinate[0];
+            int y = coordinate[1];
+            this.setValueOfBoardMatrix(x, y, "O");
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    int[] newCoordinate = new int[]{x + i, j + 1};
+                    if (Board.isValidCoordinate(newCoordinate) && !shipFootprint.contains(newCoordinate)) {
+                        shipFootprint.add(newCoordinate);
+                    }
+
+                }
+
+            }
+        }
+        return true;
+    }
+
+    public static boolean isValidCoordinate(int[] coordinate) {
+        int x = coordinate[0];
+        int y = coordinate[1];
+
+        return x >= 1 && x <= 11 && y >= 1 && y <= 11;
     }
 
     public void cleanMatrix() {

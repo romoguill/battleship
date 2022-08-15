@@ -5,12 +5,6 @@ import java.util.HashMap;
 
 public class PcBrain {
 
-    private enum Orientation {
-        UNKNOWN,
-        HORIZONTAL,
-        VERTICAL
-    }
-
     private Orientation discoveredOrientation;
     private ArrayList<int[]> possibleCoordinates;
     private ArrayList<int[]> highProbabilityCoordinates = new ArrayList<>();
@@ -72,18 +66,11 @@ public class PcBrain {
 //        Loop over each neighbour, if that coordinate was already a possible coordinate,
 //          remove it from that category and add it to the high probability ones.
         for (int[] coord : quadrants.values()) {
-            if (isValidCoordinate(coord) && this.possibleCoordinates.contains(coord)) {
+            if (Board.isValidCoordinate(coord) && this.possibleCoordinates.contains(coord)) {
                 this.possibleCoordinates.remove(coord);
                 this.highProbabilityCoordinates.add(coord);
             }
         }
-    }
-
-    private boolean isValidCoordinate(int[] coordinate) {
-        int x = coordinate[0];
-        int y = coordinate[1];
-
-        return x >= 1 && x <= 11 && y >= 1 && y <= 11;
     }
 
 
