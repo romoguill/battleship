@@ -2,27 +2,14 @@ package Game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Board {
 
     private final String[][] boardMatrix;
-    private final ArrayList<int[]> takenCoordinates = new ArrayList<>();
-
-
-//    NO VEO QUE SE USE EN NINGUN LADO
-
-//    private String[][] boardMatrixPlayer = new String[11][11];
-
-//    public void blankBoard(String[][] boardMatrix) {
-//        for (Integer i = 0; i < 11; i++) {
-//            for (Integer j = 0; j < 11; j++) {
-//                if (i == 0 && j == 0) {
-//                    boardMatrix[0][0] = "*";
-//                } else {
-//                    if (i == 0 && j != 0) {
-//                        boardMatrix[0][j] = i.toString();
+    private final HashSet<Coordinate> takenCoordinates = new HashSet<>();
 
     public String[][] getBoardMatrix() {
         String[][] deepCopy = new String[10][10];
@@ -37,18 +24,6 @@ public class Board {
     public void setValueOfBoardMatrix(int x, int y, String value) {
         this.boardMatrix[y][x] = value;
     }
-
-//                    }
-//                }
-//                ;
-//                if (i > 0 && j > 0) {
-//                    boardMatrix[i][j] = " ";
-//                }
-//                ;
-//            }
-//            ;
-//        }
-//    }
 
     public Board() {
         this.boardMatrix = new String[11][11];
@@ -155,35 +130,32 @@ public class Board {
         } while (placementCondition.equals("error") || overPlacement > 0);
     }
 
-    public boolean placeShip2(int xOrigin, int yOrigin, Ship ship, Orientation orientation) {
+    public boolean placeShip2(Coordinate coordinate, Ship ship, Orientation orientation) {
 //        Get the possible footprint of the ship by adding coordinates to an array.
-        ArrayList<int[]> shipFootprint = new ArrayList<>();
+        ArrayList<Coordinate> shipFootprint = new ArrayList<>();
         for (int i = 0; i < ship.getSize(); i++) {
             if (orientation == Orientation.HORIZONTAL) {
-                shipFootprint.add(new int[]{xOrigin + i, yOrigin});
+                shipFootprint.add(new Coordinate(coordinate.getX() + i, coordinate.getY()));
             } else if (orientation == Orientation.VERTICAL) {
-                shipFootprint.add(new int[]{xOrigin, yOrigin + i});
+                shipFootprint.add(new Coordinate(coordinate.getX(), coordinate.getY() + i));
             }
         }
 
 //        Check if footprint of ship has invalid or already taken coordinates
-        for (int[] coordinate : shipFootprint) {
-            if (!Board.isValidCoordinate(coordinate) ||
-                    this.takenCoordinates.stream().anyMatch(arr -> Arrays.equals(arr, coordinate))) {
+        for (Coordinate c : shipFootprint) {
+            if (!Board.isValidCoordinate(c) ||
+                    this.takenCoordinates.stream().anyMatch(c::equals)) {
                 return false;
             }
         }
 
 //        For each coordinate in the footprint add its coordinate and all surrounding ones to the takenCoordinates Array
-        for (int[] coordinate : shipFootprint) {
-            int x = coordinate[0];
-            int y = coordinate[1];
-            this.setValueOfBoardMatrix(x, y, "*");
+        for (Coordinate c : shipFootprint) {
+            this.setValueOfBoardMatrix(c.getX(), c.getY(), "*");
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    int[] newCoordinate = new int[]{x + i, y + j};
-                    if (Board.isValidCoordinate(newCoordinate) &&
-                            !this.takenCoordinates.stream().anyMatch(arr -> Arrays.equals(arr, newCoordinate))) {
+                    Coordinate newCoordinate = new Coordinate(coordinate.getX() + i, coordinate.getY() + j);
+                    if (Board.isValidCoordinate(newCoordinate)) {
                         this.takenCoordinates.add(newCoordinate);
                     }
                 }
@@ -193,23 +165,9 @@ public class Board {
         return true;
     }
 
-    public static boolean isValidCoordinate(int[] coordinate) {
-        int x = coordinate[0];
-        int y = coordinate[1];
-
-        return x >= 1 && x <= 10 && y >= 1 && y <= 10;
-    }
-
-    public void cleanMatrix() {
-        System.out.println(boardMatrix);
-        System.out.println(boardMatrix.length);
-        for (int i = 1; i < boardMatrix.length; i++) {
-            for (int j = 1; j < boardMatrix.length; j++) {
-                if (boardMatrix[j][i].equals("o")) {
-                    boardMatrix[j][i] = "";
-                }
-            }
-        }
+    public static boolean isValidCoordinate(Coordinate coordinate) {
+        return coordinate.getX() >= 1 && coordinate.getX() <= 10 &&
+                coordinate.getY() >= 1 && coordinate.getY() <= 10;
     }
 }
 

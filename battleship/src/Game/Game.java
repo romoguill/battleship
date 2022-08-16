@@ -166,7 +166,7 @@ public class Game extends GameConfig {
                 System.out.print("Y: ");
                 int yInput = scanner.nextInt();
 
-                wasPlaced = board.placeShip2(xInput, yInput, ship, orientation);
+                wasPlaced = board.placeShip2(new Coordinate(xInput, yInput), ship, orientation);
                 if (!wasPlaced) System.out.println("Couldn't place ship, invalid/already taken coordinates\n");
             }
         }

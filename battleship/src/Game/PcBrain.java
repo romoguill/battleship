@@ -66,7 +66,7 @@ public class PcBrain {
 //        Loop over each neighbour, if that coordinate was already a possible coordinate,
 //          remove it from that category and add it to the high probability ones.
         for (int[] coord : quadrants.values()) {
-            if (Board.isValidCoordinate(coord) && this.possibleCoordinates.contains(coord)) {
+            if (Board.isValidCoordinate(new Coordinate(coord[0], coord[1])) && this.possibleCoordinates.contains(coord)) {
                 this.possibleCoordinates.remove(coord);
                 this.highProbabilityCoordinates.add(coord);
             }
