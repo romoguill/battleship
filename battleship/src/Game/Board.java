@@ -1,6 +1,7 @@
 package Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -167,7 +168,8 @@ public class Board {
 
 //        Check if footprint of ship has invalid or already taken coordinates
         for (int[] coordinate : shipFootprint) {
-            if (!Board.isValidCoordinate(coordinate) || this.takenCoordinates.contains(coordinate)) {
+            if (!Board.isValidCoordinate(coordinate) ||
+                    this.takenCoordinates.stream().anyMatch(arr -> Arrays.equals(arr, coordinate))) {
                 return false;
             }
         }
@@ -179,8 +181,9 @@ public class Board {
             this.setValueOfBoardMatrix(x, y, "*");
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    int[] newCoordinate = new int[]{x + i, j + 1};
-                    if (Board.isValidCoordinate(newCoordinate) && !takenCoordinates.contains(newCoordinate)) {
+                    int[] newCoordinate = new int[]{x + i, y + j};
+                    if (Board.isValidCoordinate(newCoordinate) &&
+                            !this.takenCoordinates.stream().anyMatch(arr -> Arrays.equals(arr, newCoordinate))) {
                         this.takenCoordinates.add(newCoordinate);
                     }
                 }
@@ -208,8 +211,6 @@ public class Board {
             }
         }
     }
-
-
 }
 
 
