@@ -12,7 +12,7 @@ public class Board {
     private final HashSet<Coordinate> takenCoordinates = new HashSet<>();
 
     public String[][] getBoardMatrix() {
-        String[][] deepCopy = new String[10][10];
+        String[][] deepCopy = new String[11][11];
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
                 deepCopy[i][j] = this.boardMatrix[i][j];
@@ -132,7 +132,7 @@ public class Board {
 
     public boolean placeShip2(Coordinate coordinate, Ship ship, Orientation orientation) {
 //        Get the possible footprint of the ship by adding coordinates to an array.
-        ArrayList<Coordinate> shipFootprint = new ArrayList<>();
+        ArrayList<Coordinate> shipFootprint = new ArrayList<Coordinate>();
         for (int i = 0; i < ship.getSize(); i++) {
             if (orientation == Orientation.HORIZONTAL) {
                 shipFootprint.add(new Coordinate(coordinate.getX() + i, coordinate.getY()));
@@ -146,11 +146,13 @@ public class Board {
             if (!Board.isValidCoordinate(c) ||
                     this.takenCoordinates.stream().anyMatch(c::equals)) {
                 return false;
+            } else {
+                ship.setShipCoordinates(shipFootprint);
             }
         }
 
 //        For each coordinate in the footprint add its coordinate and all surrounding ones to the takenCoordinates Array
-        for (Coordinate c : shipFootprint) {
+        for (Coordinate c : ship.getShipCoordinates()) {
             this.setValueOfBoardMatrix(c.getX(), c.getY(), "*");
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {

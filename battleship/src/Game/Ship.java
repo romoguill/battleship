@@ -1,16 +1,14 @@
 package Game;
 
-import java.util.Scanner;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
 
 public class Ship {
     private String name;
     private int size;
     private int shotsTaken = 0;
-    private int x;
-    private int y;
-    private boolean horizontal;
+    private Orientation orientation;
     private boolean sunk = false;
+    private ArrayList<Coordinate> shipCoordinates = new ArrayList<>();
 
 
     public Ship(String name, int size) {
@@ -18,13 +16,9 @@ public class Ship {
         this.size = size;
     }
 
-    public boolean wasShot(int x, int y) {
+    public boolean wasShot(Coordinate coordinate) {
         boolean wasReached = false;
-        if (this.horizontal && this.y == y) {
-            wasReached = IntStream.range(this.x, this.x + this.size + 1).anyMatch(num -> num == x);
-        } else if (!this.horizontal && this.x == x) {
-            wasReached = IntStream.range(this.y, this.y + this.size + 1).anyMatch(num -> num == y);
-        }
+        wasReached = this.shipCoordinates.stream().anyMatch(coordinate::equals);
 
         if (wasReached) {
             this.shotsTaken++;
@@ -33,7 +27,6 @@ public class Ship {
             }
             return true;
         }
-
         return false;
     }
 
@@ -53,32 +46,36 @@ public class Ship {
         return size;
     }
 
+    public int getShotsTaken() {
+        return shotsTaken;
+    }
+
+    public void setShotsTaken(int shotsTaken) {
+        this.shotsTaken = shotsTaken;
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+    }
+
+    public void setSunk(boolean sunk) {
+        this.sunk = sunk;
+    }
+
+    public ArrayList<Coordinate> getShipCoordinates() {
+        return shipCoordinates;
+    }
+
+    public void setShipCoordinates(ArrayList<Coordinate> shipCoordinates) {
+        this.shipCoordinates = shipCoordinates;
+    }
+
     public void setSize(int size) {
         this.size = size;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public boolean isHorizontal() {
-        return horizontal;
-    }
-
-    public void setHorizontal(boolean horizontal) {
-        this.horizontal = horizontal;
     }
 
     public boolean isSunk() {

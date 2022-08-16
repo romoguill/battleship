@@ -2,7 +2,6 @@ package Game;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.SortedMap;
 
 public class Game extends GameConfig {
     public static ArrayList<Ship> player1Ships;
@@ -120,7 +119,7 @@ public class Game extends GameConfig {
                 int x = coordinate[0];
                 int y = coordinate[1];
 
-                shoot(x, y, player1Board, player1Ships);
+                shoot(new Coordinate(x, y), player1Board, player1Ships);
                 player1Board.printBoard();
                 if (isGameOver(player1Ships)) {
                     System.out.printf("%s has won!%n", player2);
@@ -134,12 +133,6 @@ public class Game extends GameConfig {
     public static void shipPlacementPhase(String player, Board board, ArrayList<Ship> ships) {
         System.out.printf("%s's turn to place ships%n", player);
         board.printBoard();
-
-//        for (Ship ship : ships) {
-//            board.placeShip(ship);
-//            System.out.println(ship.getName() + " placed successfully.\n");
-//            board.printBoard();
-//        }
 
         for (Ship ship : ships) {
             boolean wasPlaced = false;
@@ -183,7 +176,7 @@ public class Game extends GameConfig {
         System.out.print("Y: ");
         int y = Integer.parseInt(scanner.next());
 
-        shoot(x, y, board, ships);
+        shoot(new Coordinate(x, y), board, ships);
 
     }
 
@@ -199,23 +192,23 @@ public class Game extends GameConfig {
         return ships;
     }
 
-    public static void shoot(int x, int y, Board board, ArrayList<Ship> ships) {
-        if (board.getBoardMatrix()[y][x].equals("*")) {
+    public static void shoot(Coordinate coordinate, Board board, ArrayList<Ship> ships) {
+        if (board.getBoardMatrix()[coordinate.getY()][coordinate.getX()].equals("*")) {
             boolean hit;
             for (Ship ship : ships) {
-                hit = ship.wasShot(x, y);
+                hit = ship.wasShot(coordinate);
                 if (hit) {
                     System.out.println("Nice aim, you hit a ship.\n");
                     if (ship.isSunk()) {
                         System.out.println("Great! You sunk a ship");
                     }
-                    board.setValueOfBoardMatrix(x, y, "H");
+                    board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "H");
                     return;
                 }
             }
         }
         System.out.println("Water");
-        board.setValueOfBoardMatrix(x, y, "W");
+        board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "W");
     }
 
     public static boolean isGameOver(ArrayList<Ship> ships) {
