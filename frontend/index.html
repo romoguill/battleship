@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+
+<style class="cp-pen-styles">
+body {
+  margin: 40px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(10,60px); 
+  grid-template-rows: repeat(10,60px);
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+}
+.box {
+  background-color: #444;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 150%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.openRoundBox{background-color: #444;
+border-top-left-radius: 20px;
+border-bottom-left-radius: 15px;
+padding: 20px;
+font-size: 150%;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;}
+
+.closeRoundBox{background-color: #444;
+border-top-right-radius: 20px;
+border-bottom-right-radius: 15px;
+padding: 20px;
+font-size: 150%;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;}
+
+
+
+.ship{display:flex;justify-content: left;gap: 3px;}
+
+
+.board{display:flex;justify-content: space-between;}
+.commandControl{display: flex;flex-direction: column; width:30%;height: 300px;border:4px red solid;justify-content: space-around;}
+.idea{width:15px;height: 15px;background-color: blue}
+
+</style>
+</head>
+<body>
+  <div class="board">
+<div class="wrapper" id="wrapper">
+</div>
+<div class="commandControl" id="commandControl"></div>
+
+</div>
+<script src="main.js"></script>
+</body>
+</html>
