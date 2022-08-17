@@ -6,26 +6,26 @@ import java.util.HashMap;
 public class PcBrain {
 
     private Orientation discoveredOrientation;
-    private ArrayList<int[]> possibleCoordinates;
-    private ArrayList<int[]> highProbabilityCoordinates = new ArrayList<>();
+    private ArrayList<Coordinate> possibleCoordinates;
+    private ArrayList<Coordinate> highProbabilityCoordinates = new ArrayList<>();
 
     public PcBrain() {
         possibleCoordinates = new ArrayList<>();
         for (int i = 1; i <= 11; i++) {
             for (int j = 1; j <= 11; j++) {
-                this.possibleCoordinates.add(new int[]{i, j});
+                this.possibleCoordinates.add(new Coordinate(i, j));
             }
         }
         this.discoveredOrientation = Orientation.UNKNOWN;
     }
 
-    public int[] useRandomAlgorithm() {
+    public Coordinate useRandomAlgorithm() {
         int x = (int) Math.floor(Math.random() * 10) + 1;
         int y = (int) Math.floor(Math.random() * 10) + 1;
-        return new int[]{x, y};
+        return new Coordinate(x, y);
     }
 
-    public int[] useTrackingAlgorithm() {
+    public Coordinate useTrackingAlgorithm() {
 //        If there are no High Probability Coordinates to check, use a random possible coordinate
         if (highProbabilityCoordinates == null || highProbabilityCoordinates.isEmpty()) {
             int randomIndex = (int) Math.floor(Math.random() * this.possibleCoordinates.size());
@@ -48,25 +48,25 @@ public class PcBrain {
 //        Depending on if the orientation of the ship is known, add the 4 quadrants as possible
 //          high probability coordinates, or 2 if its known (East, West for horizontal; North
 //          South for vertical)
-        HashMap<String, int[]> quadrants = new HashMap<>();
+        HashMap<String, Coordinate> quadrants = new HashMap<>();
 
         if (this.discoveredOrientation == Orientation.UNKNOWN) {
-            quadrants.put("North", new int[]{x, y - 1});
-            quadrants.put("South", new int[]{x, y + 1});
-            quadrants.put("East", new int[]{x + 1, y});
-            quadrants.put("West", new int[]{x - 1, y});
+            quadrants.put("North", new Coordinate(x, y - 1));
+            quadrants.put("South", new Coordinate(x, y + 1));
+            quadrants.put("East", new Coordinate(x + 1, y));
+            quadrants.put("West", new Coordinate(x - 1, y));
         } else if (this.discoveredOrientation == Orientation.HORIZONTAL) {
-            quadrants.put("East", new int[]{x + 1, y});
-            quadrants.put("West", new int[]{x - 1, y});
+            quadrants.put("East", new Coordinate(x + 1, y));
+            quadrants.put("West", new Coordinate(x - 1, y));
         } else if (this.discoveredOrientation == Orientation.VERTICAL) {
-            quadrants.put("North", new int[]{x, y - 1});
-            quadrants.put("South", new int[]{x, y + 1});
+            quadrants.put("North", new Coordinate(x, y - 1));
+            quadrants.put("South", new Coordinate(x, y + 1));
         }
 
 //        Loop over each neighbour, if that coordinate was already a possible coordinate,
 //          remove it from that category and add it to the high probability ones.
-        for (int[] coord : quadrants.values()) {
-            if (Board.isValidCoordinate(new Coordinate(coord[0], coord[1])) && this.possibleCoordinates.contains(coord)) {
+        for (Coordinate coord : quadrants.values()) {
+            if (Board.isValidCoordinate(coord) && this.possibleCoordinates.contains(coord)) {
                 this.possibleCoordinates.remove(coord);
                 this.highProbabilityCoordinates.add(coord);
             }

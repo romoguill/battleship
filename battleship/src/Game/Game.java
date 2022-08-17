@@ -115,9 +115,14 @@ public class Game extends GameConfig {
                 }
                 player2Board.printBoard();
             } else {
-                int[] coordinate = pcBrain.useRandomAlgorithm();
-                int x = coordinate[0];
-                int y = coordinate[1];
+                Coordinate pcChoice;
+                if (GameConfig.getDifficulty() == Difficulty.EASY) {
+                    pcChoice = pcBrain.useRandomAlgorithm();
+                } else if (GameConfig.getDifficulty() == Difficulty.HARD) {
+                    pcChoice = pcBrain.useTrackingAlgorithm();
+                }
+                int x = pcChoice.getX();
+                int y = pcChoice.getY();
 
                 shoot(new Coordinate(x, y), player1Board, player1Ships);
                 player1Board.printBoard();
