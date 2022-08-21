@@ -128,8 +128,9 @@ public class Game extends GameConfig {
                 int x = pcChoice.getX();
                 int y = pcChoice.getY();
 
-                shoot(new Coordinate(x, y), player1Board, player1Ships);
-                player1Board.printBoard();
+                BoardValue result = shoot(new Coordinate(x, y), player1Board, player1Ships);
+                if (GameConfig.getDifficulty() == Difficulty.HARD)
+                    player1Board.printBoard();
                 if (isGameOver(player1Ships)) {
                     System.out.printf("%s has won!%n", player2);
                     break;
@@ -201,7 +202,7 @@ public class Game extends GameConfig {
         return ships;
     }
 
-    public static void shoot(Coordinate coordinate, Board board, ArrayList<Ship> ships) {
+    public static BoardValue shoot(Coordinate coordinate, Board board, ArrayList<Ship> ships) {
         boolean hit;
         for (Ship ship : ships) {
             hit = ship.wasShot(coordinate);
@@ -209,14 +210,17 @@ public class Game extends GameConfig {
                 System.out.println("Nice aim, you hit a ship.\n");
                 if (ship.isSunk()) {
                     System.out.println("Great! You sunk a ship");
+                    return BoardValue.SUNK;
                 }
                 board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "H");
-                return;
+                return BoardValue.HIT;
             }
         }
 
+
         System.out.println("Water");
         board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "W");
+        return BoardValue.WATER;
     }
 
     public static boolean isGameOver(ArrayList<Ship> ships) {
