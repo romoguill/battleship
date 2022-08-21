@@ -115,12 +115,16 @@ public class Game extends GameConfig {
                 }
                 player2Board.printBoard();
             } else {
-                Coordinate pcChoice;
+                Coordinate pcChoice = null;
                 if (GameConfig.getDifficulty() == Difficulty.EASY) {
                     pcChoice = pcBrain.useRandomAlgorithm();
                 } else if (GameConfig.getDifficulty() == Difficulty.HARD) {
                     pcChoice = pcBrain.useTrackingAlgorithm();
+                } else {
+                    System.out.println("Difficulty not yet implemented");
+                    System.exit(0);
                 }
+
                 int x = pcChoice.getX();
                 int y = pcChoice.getY();
 
@@ -198,20 +202,19 @@ public class Game extends GameConfig {
     }
 
     public static void shoot(Coordinate coordinate, Board board, ArrayList<Ship> ships) {
-        if (board.getBoardMatrix()[coordinate.getY()][coordinate.getX()].equals("*")) {
-            boolean hit;
-            for (Ship ship : ships) {
-                hit = ship.wasShot(coordinate);
-                if (hit) {
-                    System.out.println("Nice aim, you hit a ship.\n");
-                    if (ship.isSunk()) {
-                        System.out.println("Great! You sunk a ship");
-                    }
-                    board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "H");
-                    return;
+        boolean hit;
+        for (Ship ship : ships) {
+            hit = ship.wasShot(coordinate);
+            if (hit) {
+                System.out.println("Nice aim, you hit a ship.\n");
+                if (ship.isSunk()) {
+                    System.out.println("Great! You sunk a ship");
                 }
+                board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "H");
+                return;
             }
         }
+
         System.out.println("Water");
         board.setValueOfBoardMatrix(coordinate.getX(), coordinate.getY(), "W");
     }
