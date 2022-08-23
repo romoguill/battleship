@@ -128,9 +128,14 @@ public class Game extends GameConfig {
                 int x = pcChoice.getX();
                 int y = pcChoice.getY();
 
-                BoardValue result = shoot(new Coordinate(x, y), player1Board, player1Ships);
-                if (GameConfig.getDifficulty() == Difficulty.HARD)
+
+                Coordinate coordinate = new Coordinate(x, y)
+
+                BoardValue result = shoot(coordinate, player1Board, player1Ships);
+                if (GameConfig.getDifficulty() == Difficulty.HARD) {
+                    pcBrain.processShotResult(coordinate, result)
                     player1Board.printBoard();
+                }
                 if (isGameOver(player1Ships)) {
                     System.out.printf("%s has won!%n", player2);
                     break;

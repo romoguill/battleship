@@ -2,12 +2,14 @@ package Game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class PcBrain {
 
     private Orientation discoveredOrientation;
     private ArrayList<Coordinate> possibleCoordinates;
     private ArrayList<Coordinate> highProbabilityCoordinates = new ArrayList<>();
+    private HashSet<Coordinate> trackedShipCoordinates = new HashSet<>();
 
     public PcBrain() {
         possibleCoordinates = new ArrayList<>();
@@ -33,6 +35,21 @@ public class PcBrain {
         } else {
             int randomIndex = (int) Math.floor(Math.random() * this.highProbabilityCoordinates.size());
             return this.highProbabilityCoordinates.get(randomIndex);
+        }
+    }
+
+    public void processShotResult(Coordinate coordinate, BoardValue result) {
+        this.highProbabilityCoordinates.remove(coordinate);
+        this.possibleCoordinates.remove(coordinate);
+        if (result == BoardValue.HIT) {
+            this.trackedShipCoordinates.add(coordinate);
+//            To find the orientation of the ship, check if there are at least 2 coordinates that have the same x o y values
+            if (this.discoveredOrientation == Orientation.UNKNOWN) {
+                if (this.trackedShipCoordinates.stream().filter(coord -> coord.getX() == coordinate.getX()).count() >= 2)
+                    this.discoveredOrientation = Orientation.HORIZONTAL;
+                if (this.trackedShipCoordinates.stream().filter(coord -> coord.getY() == coordinate.getY()).count() >= 2)
+                    this.discoveredOrientation = Orientation.VERTICAL;
+            }
         }
     }
 
@@ -72,7 +89,7 @@ public class PcBrain {
             }
         }
 
-        
+
     }
 
 
