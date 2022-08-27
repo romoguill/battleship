@@ -41,25 +41,44 @@ public class PcBrain {
     public void processShotResult(Coordinate coordinate, BoardValue result) {
         this.highProbabilityCoordinates.remove(coordinate);
         this.possibleCoordinates.remove(coordinate);
+
         if (result == BoardValue.HIT) {
             this.trackedShipCoordinates.add(coordinate);
-//            To find the orientation of the ship, check if there are at least 2 coordinates that have the same x o y values
+//            To find the orientation of the ship, check if there are at least 2 coordinates that have the same x or y values
             if (this.discoveredOrientation == Orientation.UNKNOWN) {
                 if (this.trackedShipCoordinates.stream().filter(coord -> coord.getX() == coordinate.getX()).count() >= 2)
                     this.discoveredOrientation = Orientation.HORIZONTAL;
+
                 if (this.trackedShipCoordinates.stream().filter(coord -> coord.getY() == coordinate.getY()).count() >= 2)
                     this.discoveredOrientation = Orientation.VERTICAL;
+            }
+            addHighProbabilityCoordinates(coordinate);
+            
+        } else if (result == BoardValue.SUNK) {
+//            If the ship was sunk, start fresh with an empty array as the high probability coordinates
+            this.highProbabilityCoordinates = new ArrayList<>();
+
+//            Remove all coordinates of the ship and its borders from the possible coordinates array
+            for (Coordinate coord : this.trackedShipCoordinates) {
+                int x = coord.getX();
+                int y = coord.getY();
+
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        this.possibleCoordinates.remove(new Coordinate(x + i, y + j));
+                    }
+                }
             }
         }
     }
 
-    public void addHighProbabilityCoordinates(int[] coordinate) {
+    public void addHighProbabilityCoordinates(Coordinate coordinate) {
 //        Check every possible direction from the coordinate passed as parameter.
 //        If the coordinate is valid and belongs to a possible coordinate, move that coordinate
 //          from possible to high probability.
 
-        int x = coordinate[0];
-        int y = coordinate[1];
+        int x = coordinate.getX();
+        int y = coordinate.getY();
 
 
 //        Depending on if the orientation of the ship is known, add the 4 quadrants as possible

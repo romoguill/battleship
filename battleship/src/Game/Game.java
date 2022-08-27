@@ -129,11 +129,11 @@ public class Game extends GameConfig {
                 int y = pcChoice.getY();
 
 
-                Coordinate coordinate = new Coordinate(x, y)
+                Coordinate coordinate = new Coordinate(x, y);
 
                 BoardValue result = shoot(coordinate, player1Board, player1Ships);
                 if (GameConfig.getDifficulty() == Difficulty.HARD) {
-                    pcBrain.processShotResult(coordinate, result)
+                    pcBrain.processShotResult(coordinate, result);
                     player1Board.printBoard();
                 }
                 if (isGameOver(player1Ships)) {
